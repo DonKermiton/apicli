@@ -57,7 +57,7 @@ func CreateAppConfigDirectory() error {
 }
 
 type MetaFileScheme struct {
-	fieldTest string
+	FieldTest string `json:"fieldTest"`
 }
 
 func LoadMetaFile(logger *slog.Logger) (MetaFileScheme, error) {

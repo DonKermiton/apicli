@@ -1,26 +1,23 @@
 package collections
 
 import (
-	"fmt"
-	"os"
+	"apicli/request"
 )
 
 type Collection struct {
 	Name     string
-	Location string
+	Location Location
+	Requests []request.Request
 }
 
-func getAppConfigDirectory() {
-
+func CreateNewCollection(name string, location Location) {
+	location.Create()
 }
 
-func SaveCollection() error {
-	configDir, err := os.UserConfigDir()
+func (c Collection) SaveCollection() {
+	c.Location.Save()
+}
 
-	if err != nil {
-		return err
-	}
-
-	fmt.Println(configDir)
-	return nil
+func (c Collection) GetCollection() {
+	c.Location.Get()
 }
