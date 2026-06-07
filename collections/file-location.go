@@ -38,13 +38,13 @@ func (f FileLocation) Create(name string) (FileLocation, error) {
 	}
 
 	contentInit := []byte("{}")
-	if err = os.WriteFile(fileLocation, []byte(contentInit), 0755); err != nil {
+	if err = os.WriteFile(fileLocation, contentInit, 0755); err != nil {
 		return FileLocation{}, err
 	}
 
 	return FileLocation{
 		Path:    fileLocation,
-		Content: []byte(contentInit),
+		Content: contentInit,
 	}, nil
 }
 
