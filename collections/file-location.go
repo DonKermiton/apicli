@@ -8,12 +8,12 @@ import (
 
 // FIXME this file should contain some mutex to concurrent operations
 type FileLocation struct {
-	Path string
-	Name string
+	Path    string
+	Content []byte
 }
 
 func (f FileLocation) GetName() string {
-	return f.Name
+	return "FILE_PROVIDER"
 }
 
 func (f FileLocation) Save() error {
@@ -37,16 +37,30 @@ func (f FileLocation) Create(name string) (FileLocation, error) {
 		return FileLocation{}, errors.New("file already exists")
 	}
 
-	if err = os.WriteFile(fileLocation, []byte("{}"), 0755); err != nil {
+	contentInit := []byte("{}")
+	if err = os.WriteFile(fileLocation, []byte(contentInit), 0755); err != nil {
 		return FileLocation{}, err
 	}
 
 	return FileLocation{
-		Path: fileLocation,
-		Name: name,
+		Path:    fileLocation,
+		Content: []byte(contentInit),
 	}, nil
 }
 
-func (f FileLocation) Get(filepath string) (FileLocation, error) {
-	os.ReadFile(filepath)
+func Get(filepath string) (FileLocation, error) {
+	if _, err := os.Stat(filepath); err != nil {
+		return FileLocation{}, err
+	}
+
+	content, err := os.ReadFile(filepath)
+
+	if err != nil {
+		return FileLocation{}, err
+	}
+
+	return FileLocation{
+		Path:    filepath,
+		Content: content,
+	}, nil
 }
